@@ -8,6 +8,7 @@ também serve bastante para poder me exercitar na nova tecnologia que estou estu
 poder me desenvolver em bancos relacionais como postgreesql
 
       Backend
+      
 💻 Tecnologias Utilizadas:
 
 ```
