@@ -1,8 +1,8 @@
 import type { ProductsRequest } from '../@types/type';
 import type { Request, Response } from 'express';
 import { prisma } from '../lib/prisma';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 class ProductsController {
   async create(req: Request<ProductsRequest>, res: Response) {
