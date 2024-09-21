@@ -33,8 +33,7 @@ class UsersController {
 
      res.status(200).json({token, user}) 
     } catch (error) {
-    //  res.status(500).json({ "error": "Erro ao criar usuário" }, error)
-    console.log(error)
+     res.status(500).json({ "error": "Erro ao criar usuário" })
     }
   }
 
