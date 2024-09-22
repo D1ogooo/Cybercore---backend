@@ -1,8 +1,8 @@
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import { jwtConfig } from '../configs/auth'
-import type { CreateUserRequest, AuthUserRequest } from '../@types/type';
 import type { Request, Response } from 'express';
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+import type { CreateUserRequest, AuthUserRequest } from '../@types/type';
+import { jwtConfig } from '../configs/auth'
 import { prisma } from '../lib/prisma';
 
 class UsersController {
@@ -31,7 +31,7 @@ class UsersController {
       },
      })
 
-     res.status(200).json({token, user}) 
+     res.status(200).json({ token, user }) 
     } catch (error) {
      res.status(500).json({ "error": "Erro ao criar usuário" })
     }
@@ -44,7 +44,8 @@ class UsersController {
        where: {
         email,
        }
-      })  
+      })
+
       if(userExists) {
        return res.status(401).json({ "error": "Email já cadastrado" })
       }
@@ -54,7 +55,7 @@ class UsersController {
        data: { name, email, password: passwordEncrypt },
       });
 
-      res.status(201).json(user);
+      res.status(201).json({ "sucesso!": "Conta criada com sucesso" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ "error": 'Erro ao criar usuário' });
