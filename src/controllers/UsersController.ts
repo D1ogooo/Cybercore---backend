@@ -1,6 +1,6 @@
-import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import type { Request, Response } from 'express';
 import type { CreateUserRequest, AuthUserRequest } from '../@types/type';
 import { jwtConfig } from '../configs/auth'
 import { prisma } from '../lib/prisma';
@@ -22,7 +22,7 @@ class UsersController {
       return res.status(401).json({ "error": "Senha inválida" })
      }
      
-     const token = jwt.sign({ id: userExists.id }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn });
+     const token = jwt.sign({ id: userExists.id, role: userExists.role }, jwtConfig.secret, { expiresIn: jwtConfig.expiresIn });
      const user = await prisma.User.findUnique({
       where: { id: userExists.id },
       select: {

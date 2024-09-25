@@ -13,20 +13,22 @@ model User {
   email     String     @unique
   password  String
   createdAt DateTime   @default(now())
+  role      String     @default("usuario")
   favorites Favorite[]
   carts     Cart[]
 }
 
+
 model Product {
-  id    String @id @default(uuid())
-  name  String
-  valor String
-  sobre String
-  image String
+  id       String     @id @default(uuid())
+  preco    Float
+  sobre    String
+  imagem   String
 
   cartItems CartItem[]
   favorites Favorite[]
 }
+
 
 model Cart {
   id     String     @id @default(uuid())
@@ -41,7 +43,7 @@ model CartItem {
   cartId    String
   product   Product @relation(fields: [productId], references: [id])
   productId String
-  quantity  Int
+  quantity  Int     @default(1)
 }
 
 model Favorite {
