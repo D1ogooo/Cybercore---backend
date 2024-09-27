@@ -12,7 +12,8 @@ const FavoriteControllers = new FavoriteController();
 router.post('/users/session', UsersControllers.auth) // rota de login
 router.post('/users/create', UsersControllers.create) // rota de registro
 
-router.get('/products/list', CheckToken, ProductsControllers.list)
+router.get('/products/list', CheckToken, ProductsControllers.list) // listar todos os usuários
+router.get('/products/product/:id', CheckToken, ProductsControllers.listUser) // lista usuario expecífico
 router.post('/products/create', upload.single('image') , CheckToken , ProductsControllers.create) // registrar algum produto
 router.post('/products/delete/:id', CheckToken , ProductsControllers.delete) // registrar algum produto
 

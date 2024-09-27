@@ -33,7 +33,6 @@ class ProductsController {
       preco: Number(preco),
       sobre,
       imagem: image,
-      userId: decoded.id
      }
     })
     res.status(200).json({
@@ -77,6 +76,20 @@ class ProductsController {
     } catch (error) {
       console.error("Erro ao processar requisição: ", error);
     }    
+  }
+
+  async listUser(req: Request, res: Response) {
+   try {
+    const { id } = req.params
+    const product = await prisma.Product.findUnique({
+     where: {
+      id
+     },
+    })
+    res.status(200).json(product)
+   } catch (error) {
+    res.status(401).json(error)
+   }
   }
 }
 
