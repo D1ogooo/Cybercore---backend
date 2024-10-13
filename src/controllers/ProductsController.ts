@@ -1,96 +1,106 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import jwt from 'jsonwebtoken'
-import type { Request, Response } from 'express';
-import { prisma } from '../lib/prisma';
-import { jwtConfig } from '../configs/auth';
-// import type { ProductsRequest } from '../@types/type';
+import fs from "node:fs";
+import path from "node:path";
+import jwt from "jsonwebtoken";
+import type { Request, Response } from "express";
+import { prisma } from "../lib/prisma";
+import { jwtConfig } from "../configs/auth";
 
 class ProductsController {
-  async create(req: Request, res: Response) {
-    const authHeader = req.headers.authorization;
-    const token = authHeader?.split(' ')[1]
-  
-    if (!token) {
-      return res.status(401).json({ error: "Token inválido" });
-    }
+	async create(req: Request, res: Response) {
+		const authHeader = req.headers.authorization;
+		const token = authHeader?.split(" ")[1];
 
-   try {
-    const { nome, preco, sobre } = req.body
-    let image = req.file ? req.file.path : null;
-    const decoded = jwt.verify(token, jwtConfig.secret) as { id: string };
-    
-    if(image) {
-     const imageName = path.basename(image)
-     image = `/uploads/${imageName}`
-    } else {
-      return res.status(401).json({ "error": "Imagem não declarada" })
-    }
+		if (!token) {
+			return res.status(401).json({ error: "Token inválido" });
+		}
 
-    await prisma.Product.create({
-     data: {
-      nome,
-      preco: Number(preco),
-      sobre,
-      imagem: image,
-     }
-    })
-    res.status(200).json({
-     "sucesso!": "Produto criado com sucesso"
-    })
+		try {
+			const { nome, preco, sobre } = req.body;
+			let image = req.file ? req.file.path : null;
+			const decoded = jwt.verify(token, jwtConfig.secret) as { id: string };
 
-   } catch (error) {
-     console.log(error)
-    res.status(500).json(error)
-   }
-  }
+			if (image) {
+				const imageName = path.basename(image);
+				image = `/uploads/${imageName}`;
+			} else {
+				return res.status(401).json({ error: "Imagem não declarada" });
+			}
 
-  async delete(req: Request, res: Response) {
-   try {
-    const { id } = req.params
-    // const filePath = path.join(__dirname, 'uploads', )
-    await prisma.Product.delete({
-      where: {
-        id
-      },
-    })
-    // await 
-   } catch (error) {
-    res.status(401).json(error)
-   }
-  }
+			await prisma.Product.create({
+				data: {
+					nome,
+					preco: Number(preco),
+					sobre,
+					imagem: image,
+				},
+			});
+			res.status(200).json({
+				"sucesso!": "Produto criado com sucesso",
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(500).json(error);
+		}
+	}
 
-  async list(req: Request, res: Response) {
-    const authHeader = req.headers.authorization;
-    const token = authHeader?.split(' ')[1]
-  
-    if (!token) {
-      return res.status(401).json({ error: "Token inválido" });
-    }
-  
-    try {
-      const decoded = jwt.verify(token, jwtConfig.secret) as { id: string };
-      const publicItens = await prisma.product.findMany();
-  
-      return res.status(200).json(publicItens);
-    } catch (error) {
-      console.error("Erro ao processar requisição: ", error);
-    }    
-  }
+	async delete(req: Request, res: Response) {
+		// try {
+		// 	const { id } = req.params;
+		// 	const imageDB = prisma.Product.findUnique({
+		// 		where: {
+		// 			id,
+		// 		},
+		// 	});
+		// 	if (imageDB.imagem) {
+		// 		const filePath = path.join(
+		// 			__dirname,
+		// 			"../uploads",
+		// 			path.basename(imageDB.imagem),
+		// 		);
+		// 		if (fs.existsSync(filePath)) {
+		// 			fs.unlinkSync(filePath);
+		// 		}
+		// 	}
+		// 	await prisma.Product.delete({
+		// 		where: {
+		// 			id,
+		// 		},
+		// 	});
+		// 	res.status(200);
+		// } catch (error) {
+		// 	res.status(401).json(error);
+		// }
+	}
 
-  async listUser(req: Request, res: Response) {
-   try {
-    const { id } = req.params
-    const product = await prisma.Product.findUnique({
-     where: {
-      id
-     },
-    })
-    res.status(200).json(product)
-   } catch (error) {
-    res.status(401).json(error)
-   }
-  }
+	async list(req: Request, res: Response) {
+		const authHeader = req.headers.authorization;
+		const token = authHeader?.split(" ")[1];
+
+		if (!token) {
+			return res.status(401).json({ error: "Token inválido" });
+		}
+
+		try {
+			const publicItens = await prisma.product.findMany();
+			return res.status(200).json({ publicItens });
+		} catch (error) {
+			console.error("Erro ao processar requisição: ", error);
+		}
+	}
+
+	async listUser(req: Request, res: Response) {
+		try {
+			const { id } = req.params;
+			const product = await prisma.Product.findUnique({
+				where: {
+					id,
+				},
+			});
+			res.status(200).json(product);
+		} catch (error) {
+			res.status(401).json(error);
+		}
+	}
 }
 
-export { ProductsController }
+export { ProductsController };
