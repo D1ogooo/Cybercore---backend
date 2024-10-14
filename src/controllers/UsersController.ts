@@ -37,6 +37,7 @@ class UsersController {
 				select: {
 					id: true,
 					name: true,
+					image: true,
 				},
 			});
 
@@ -116,7 +117,20 @@ class UsersController {
 				data: { image: imageRequest },
 			});
 
-			res.status(200).json({ success: "Imagem atualizada" });
+			const userExists = await prisma.User.findUnique({
+				where: { email },
+			});
+
+			const user = await prisma.User.findUnique({
+				where: { id: userExists.id },
+				select: {
+					id: true,
+					name: true,
+					image: true,
+				},
+			});
+
+			res.status(202).json({ user });
 		} catch (error) {
 			console.error(error);
 			res.status(500).json({ error: "Erro ao atualizar imagem" });
