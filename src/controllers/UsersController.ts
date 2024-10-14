@@ -1,9 +1,11 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import fs from "node:fs";
 import type { Request, Response } from "express";
 import type { CreateUserRequest, AuthUserRequest } from "../@types/type";
 import { jwtConfig } from "../configs/auth";
 import { prisma } from "../lib/prisma";
+import path from "node:path";
 
 class UsersController {
 	async auth(req: Request<AuthUserRequest>, res: Response) {
@@ -69,9 +71,56 @@ class UsersController {
 		}
 	}
 
-	async updateImage(req: Request<CreateUserRequest>, res: Response) {
+	async updateImage(
+		req: Request<unknown, unknown, CreateUserRequest>,
+		res: Response,
+	) {
 		try {
-		} catch (error) {}
+			const { email, password } = req.body;
+			let imageRequest = req.file ? req.file.path : null;
+
+			if (!imageRequest) {
+				return res.status(400).json({ error: "Imagem não declarada" });
+			}
+
+			const user = await prisma.User.findUnique({
+				where: { email },
+				select: { password: true, image: true },
+			});
+
+			if (!user) {
+				return res.status(404).json({ error: "Usuário não encontrado" });
+			}
+
+			const passwordMatch = await bcrypt.compare(password, user.password);
+			if (!passwordMatch) {
+				return res.status(401).json({ error: "Senha inválida" });
+			}
+
+			if (user.image) {
+				const filePath = path.join(
+					__dirname,
+					"../uploads",
+					path.basename(user.image),
+				);
+				if (fs.existsSync(filePath)) {
+					fs.unlinkSync(filePath);
+				}
+			}
+
+			const imageName = path.basename(imageRequest);
+			imageRequest = `/uploads/${imageName}`;
+
+			await prisma.User.update({
+				where: { email },
+				data: { image: imageRequest },
+			});
+
+			res.status(200).json({ success: "Imagem atualizada" });
+		} catch (error) {
+			console.error(error);
+			res.status(500).json({ error: "Erro ao atualizar imagem" });
+		}
 	}
 }
 

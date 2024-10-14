@@ -1,10 +1,18 @@
 export interface AuthUserRequest {
- email: string;
- password: string;
+	email: string;
+	password: string;
 }
 
 export interface CreateUserRequest {
- name: string;
- email: string;
- password: string;
+	name: string;
+	email: string;
+	password: string;
+}
+
+export interface CreateUserRequest {
+	body: {
+		name: string;
+		email: string;
+		password: string;
+	};
 }
