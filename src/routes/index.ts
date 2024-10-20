@@ -6,6 +6,7 @@ import { CheckToken } from "../middlewares/CheckToken";
 import { upload } from "../configs/multerConfig";
 import { FavoriteController } from "../controllers/FavoriteController";
 import { CartController } from "../controllers/CartController";
+import { UsersAvatarController } from "../controllers/UsersAvatarController";
 const UsersControllers = new UsersController();
 const ProductsControllers = new ProductsController();
 const FavoriteControllers = new FavoriteController();
@@ -13,11 +14,18 @@ const CartControllers = new CartController();
 
 router.post("/users/session", UsersControllers.auth); // rota de login
 router.post("/users/create", UsersControllers.create); // rota de registro
-router.post(
+// router.post(
+// 	"/users/updateImage",
+// 	upload.single("image"),
+// 	CheckToken,
+// 	UsersControllers.updateImage as RequestHandler,
+// );
+
+router.patch(
 	"/users/updateImage",
 	upload.single("image"),
 	CheckToken,
-	UsersControllers.updateImage as RequestHandler,
+	UsersAvatarController,
 );
 
 router.get("/products/list", CheckToken, ProductsControllers.list); // listar todos os usuários
