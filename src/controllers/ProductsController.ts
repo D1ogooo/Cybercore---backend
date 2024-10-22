@@ -44,32 +44,32 @@ class ProductsController {
 	}
 
 	async delete(req: Request, res: Response) {
-		// try {
-		// 	const { id } = req.params;
-		// 	const imageDB = prisma.Product.findUnique({
-		// 		where: {
-		// 			id,
-		// 		},
-		// 	});
-		// 	if (imageDB.imagem) {
-		// 		const filePath = path.join(
-		// 			__dirname,
-		// 			"../uploads",
-		// 			path.basename(imageDB.imagem),
-		// 		);
-		// 		if (fs.existsSync(filePath)) {
-		// 			fs.unlinkSync(filePath);
-		// 		}
-		// 	}
-		// 	await prisma.Product.delete({
-		// 		where: {
-		// 			id,
-		// 		},
-		// 	});
-		// 	res.status(200);
-		// } catch (error) {
-		// 	res.status(401).json(error);
-		// }
+		try {
+			const { id } = req.params;
+			const imageDB = prisma.Product.findUnique({
+				where: {
+					id,
+				},
+			});
+			if (imageDB.imagem) {
+				const filePath = path.join(
+					__dirname,
+					"../uploads",
+					path.basename(imageDB.imagem),
+				);
+				if (fs.existsSync(filePath)) {
+					fs.unlinkSync(filePath);
+				}
+			}
+			await prisma.Product.delete({
+				where: {
+					id,
+				},
+			});
+			res.status(200);
+		} catch (error) {
+			res.status(401).json(error);
+		}
 	}
 
 	async list(req: Request, res: Response) {
