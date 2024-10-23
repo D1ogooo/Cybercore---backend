@@ -36,7 +36,7 @@ router.post(
 	CheckToken,
 	ProductsControllers.create,
 ); // registrar algum produto
-router.post("/products/delete/:id", CheckToken, ProductsControllers.delete); // deletar algum produto
+router.delete("/products/delete/:id", CheckToken, ProductsControllers.delete); // deletar algum produto
 
 router.get("/favorites/list", CheckToken, FavoriteControllers.getall); // listar os favoritos que o usuario tem
 router.post(
