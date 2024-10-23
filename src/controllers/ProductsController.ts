@@ -38,7 +38,7 @@ class ProductsController {
 				"sucesso!": "Produto criado com sucesso",
 			});
 		} catch (error) {
-			console.log(error);
+			
 			res.status(500).json(error);
 		}
 	}
@@ -46,7 +46,7 @@ class ProductsController {
 	async delete(req: Request, res: Response) {
 		try {
 			const { id } = req.params;
-			console.log(id);
+			
 			const imageDB = await prisma.Product.findUnique({
 				where: {
 					id,
