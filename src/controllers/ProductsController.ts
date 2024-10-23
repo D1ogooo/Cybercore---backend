@@ -46,11 +46,13 @@ class ProductsController {
 	async delete(req: Request, res: Response) {
 		try {
 			const { id } = req.params;
-			const imageDB = prisma.Product.findUnique({
+			console.log(id);
+			const imageDB = await prisma.Product.findUnique({
 				where: {
 					id,
 				},
 			});
+			console.log(imageDB.imagem);
 			if (imageDB.imagem) {
 				const filePath = path.join(
 					__dirname,
@@ -68,7 +70,7 @@ class ProductsController {
 			});
 			res.status(200);
 		} catch (error) {
-			res.status(401).json(error);
+			res.status(401).json({ error: "Erro ao tentar deletar o produto" });
 		}
 	}
 
