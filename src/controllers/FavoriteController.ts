@@ -24,7 +24,7 @@ class FavoriteController {
 			});
 			res.status(200).json({ favorites });
 		} catch (error) {
-			console.log(error);
+			
 			return res.status(400).json({ error: "Dados inválidos" });
 		}
 	}
@@ -39,7 +39,7 @@ class FavoriteController {
 			if (!token) {
 				return res.status(401).json({ message: "Acesso negado" });
 			}
-			console.log(idProduct);
+		
 			await prisma.Favorite.deleteMany({
 				where: {
 					productId: idProduct,
@@ -47,7 +47,7 @@ class FavoriteController {
 			});
 			res.status(200).json({ sucess: "item deletado 🛒" });
 		} catch (error) {
-			console.log(error);
+			
 			return res.status(400).json({ error: "Dados inválidos" });
 		}
 	}
@@ -86,7 +86,7 @@ class FavoriteController {
 			});
 			res.status(201).json({ favoriteUserCreate });
 		} catch (error) {
-			console.log(error);
+			
 			return res.status(500).json({ error: "Erro ao favoritar item" });
 		}
 	}
