@@ -39,7 +39,7 @@ router.post(
 router.delete("/products/delete/:id", CheckToken, ProductsControllers.delete); // deletar algum produto
 
 router.get("/favorites/list", CheckToken, FavoriteControllers.getall); // listar os favoritos que o usuario tem
-router.post(
+router.delete(
 	"/favorites/deleteFavorite/:id",
 	CheckToken,
 	FavoriteControllers.deleteFavorite,
